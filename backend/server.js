@@ -1,16 +1,16 @@
-const express = require("express");
+const express = require('express');
 const dotenv = require('dotenv').config();
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 3000
 
 const app = express()
 
-app.listen(port, () => console.log("Server listening on port " + port))
 
-//TODO: Add routes for API routes
-/*
-app.get('/api/reports', (req, res) => {
-   res.json([])
-)}
- */
+// so each resource has its own route file under routes...
+// therefore: find each get in individual files in the routes folder
+/* TODO: Add all routes for the router: Get Reports, Create a report, Delete a report */
+app.use('/api/crashReports', require('./routes/crashReportRoutes'))
 
-//Hello
+app.listen(port, () => console.log('Server listening on port ' + port))
+
+
+ 
