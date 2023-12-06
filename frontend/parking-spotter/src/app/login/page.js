@@ -41,38 +41,47 @@ export default function LoginPage() {
     setloginInProgress(true);
 
     axios
-      .post(
-        'http://localhost:8000/api/users/login',
-        {
-          email: email,
-          password: password,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        console.log('Working');
-        setLoginSuccess(true);
-        setShowSuccessMessage(true);
-        setloginInProgress(false);
-        showNotification('Login Successful!', 'You have successfully logged in.');
-      })
-      .catch((error) => {
-        console.log(error.response); // Log the entire error response for inspection
+  .post(
+    'http://localhost:8000/api/users/login',
+    {
+      email: email,
+      password: password,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    }
+  )
+  .then((response) => {
+    console.log(response);
+    console.log('Working');
+    setLoginSuccess(true);
+    setShowSuccessMessage(true);
+    setloginInProgress(false);
+    showNotification('Login Successful!', 'You have successfully logged in.');
+  })
+  .catch((error) => {
+    console.log(error.response); // Log the entire error response for inspection
 
-        if (error.response && error.response.status === 400) {
-          // Unauthorized: Incorrect username or password
-          setLoginError('Incorrect email or password. Please try again.');
-          //setLoginError('An error occurred during login. Please try again later.');
-        } 
+    if (error.response && error.response.status === 400) {
+      // Unauthorized: Incorrect username or password
+      const errorResponse = error.response.data;
 
-        setloginInProgress(false);
-        showNotification('Login Failed', `Error: ${error.message}`);
-      });
+      if (errorResponse.error === 'invalid_email') {
+        setLoginError('This email is not registered. Please register to create a new account.');
+      } else if (errorResponse.error === 'invalid_password') {
+        setLoginError('Incorrect password. Please try again.');
+      } else {
+        setLoginError('Incorrect email or password. Please try again.');
+      }
+    } else {
+      setLoginError('An error occurred during login. Please try again later.');
+    }
+
+    setloginInProgress(false);
+    showNotification('Login Failed', `Error: ${error.message}`);
+  });
   }
 
   useEffect(() => {
@@ -84,7 +93,7 @@ export default function LoginPage() {
     // Clear the error message after a short delay
     const errorTimeoutId = setTimeout(() => {
       setLoginError('');
-    }, 4000); // Adjust the duration as needed
+    }, 5000); // Adjust the duration as needed
 
     return () => {
       clearTimeout(successTimeoutId);
@@ -113,14 +122,14 @@ export default function LoginPage() {
 
       {/* Display the success message only when login is successful */}
       {showSuccessMessage && (
-        <div className="text-center text-green-500 mt-4">
-          <strong>Congratulations!</strong> You can now make reports!
+        <div className="text-center text-green-500 mt-8">
+          <strong>Congratulations!</strong> You are now logged in!
         </div>
       )}
 
       {/* Display the error message when login fails */}
       {loginError && (
-        <div className="text-center text-red-500 mt-4">
+        <div className="text-center text-red-500 mt-8">
           <strong>Login Failed!</strong> {loginError}
         </div>
       )}
