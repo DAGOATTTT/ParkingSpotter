@@ -17,3 +17,49 @@ button{
 button[type="submit"], .submit{
   @apply border-0 bg-title text-white
 }
+#mobilePushText,
+#emailText,
+#textText{
+  font-size: 23px;
+  color: #494949;
+}
+
+#mobilePush,
+#email,
+#text{
+  position: relative;
+  width: 40px;
+  height: 20px;
+  border: 2px solid #494949;
+  border-radius: 20px;
+  display: -webkit-inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: .3s;
+}
+.circle {
+  position: absolute;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 20px;
+  background-color: #494949;
+  transition: .3s;
+}
+.active {
+  border-color: rgb(85, 227, 180);
+}
+.active + .text {
+  color: rgb(85, 227, 180);
+}
+.active .circle {
+  left: 100%;
+  transform: translateX(-100%);
+  transition: .3s;
+  background-color: rgb(85, 227, 180);
+}
+.tab {
+  display: inline-block;
+  margin-left: 4em;
+}
